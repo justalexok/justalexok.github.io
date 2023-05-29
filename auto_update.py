@@ -16,7 +16,7 @@ PATH_TO_BLOG = PATH_TO_BLOG_REPO.parent
 
 PATH_TO_CONTENT = PATH_TO_BLOG/"content"
 
-PATH_TO_CONTENT.mkdir(exist_ok=True, parents=True)
+#PATH_TO_CONTENT.mkdir(exist_ok=True, parents=True)
 
 def update_blog(commit_message='Updates blog'):
 
@@ -26,7 +26,8 @@ def update_blog(commit_message='Updates blog'):
 	origin = repo.remote(name='origin')
 	origin.push()
 
-with open(PATH_TO_BLOG/'index.html','w') as f:
-	f.write("This is my blog, follow for more...")
+with open(PATH_TO_BLOG/'index.html','w+') as f:
+	content = f.read()
+	f.write(f"{content}\nUpdates coming next week...")
 
 update_blog()
