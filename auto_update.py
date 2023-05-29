@@ -27,8 +27,6 @@ def update_blog(commit_message='Updates blog'):
 	origin.push()
 
 with open(PATH_TO_BLOG/'index.html','w+') as f:
-	content = f.read()
-	print(content)
-	f.write(f"{content}\nUpdates coming next week...")
+	f.write(f"Are you interested in a Food Blog? Follow this page!")
 
 update_blog()
