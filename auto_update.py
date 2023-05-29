@@ -28,6 +28,7 @@ def update_blog(commit_message='Updates blog'):
 
 with open(PATH_TO_BLOG/'index.html','w+') as f:
 	content = f.read()
+	print(content)
 	f.write(f"{content}\nUpdates coming next week...")
 
 update_blog()
