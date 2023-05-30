@@ -74,15 +74,18 @@ def write_to_index(path_to_new_content):
 		soup = Soup(index.read(), 'html.parser')
 
 	links = soup.find_all("a")
-	if len(links) > 0 :
-		last_link = links[-1]
+	
+	last_link = links[-1]
 
-		if check_for_duplicate_links(path_to_new_content,links):
-			raise ValueError("Link already exists")
+	if check_for_duplicate_links(path_to_new_content,links):
+		raise ValueError("Link already exists")
 
 	link_to_new_blog = soup.new_tag("a", href=Path(*path_to_new_content.parts[-2:])) #content/1.html
 	link_to_new_blog.string = PATH_TO_CONTENT.name.split(".")[0]
 	last_link.insert_after(link_to_new_blog)
+
+	# for link in links:
+	# 	link.extract()
 
 	with open(PATH_TO_BLOG/"index.html","w") as f:
 		f.write(str(soup.prettify(formatter='html')))
@@ -90,6 +93,6 @@ def write_to_index(path_to_new_content):
 
 update_blog()
 
-#path_to_new_content = create_new_blog('SICK PLAY!','watch this now...', 'C:\\Users\\alexg\\OneDrive\\Pictures\\Screenshots\\Screenshot 2023-05-28 004418.png')
+# path_to_new_content = create_new_blog('SICK PLAY!','watch this now...', 'C:\\Users\\alexg\\OneDrive\\Pictures\\Screenshots\\Screenshot 2023-05-28 152107.png')
 
-#write_to_index(path_to_new_content)
+# write_to_index(path_to_new_content)
