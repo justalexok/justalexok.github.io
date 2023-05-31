@@ -114,7 +114,7 @@ def get_response(title):
 
 	response = openai.Completion.create(engine = 'text-davinci-003',
 										prompt = create_prompt(title=title),
-										max_tokens = 750,
+										max_tokens = 250,
 										temperature=1)
 	return response
 
@@ -144,7 +144,7 @@ def save_image(img_url, file_name):
 	return image_res.status_code
 
 
-blog_title = 'Second intro'
+blog_title = 'Third intro'
 img_title = 'Superhero Mum'
 
 blog_content = get_response(blog_title)['choices'][0]['text']
