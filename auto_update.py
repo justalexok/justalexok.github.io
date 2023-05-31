@@ -94,16 +94,16 @@ def create_prompt(title):
 
 	prompt = f"""
 
-	Alex's website.
+	Viktorija's cooking blog
 
-	Biography: I'm a videogame developer, exploring how AI will change the videogame industry
+	Biography: I have a passion for cooking and sharing recipes, whilst also being a mother and studying web design.
 
 	Blog
 
 	31/5/2023
 	Title: {title}
-	tags: AI, tech, videogames, machine learning
-	Summary: I talk about how I think that developments in AI will change the videogame industry and about an new game I'm developing that uses AI.
+	tags: Food blogger, chef, mum, web design, work, passion, food, busy
+	Summary: I introduce myself and discuss how I'm juggling my passions for food, being a mum, sharing my life online, and my new interest in web design.
 	Full text: 
 
 
@@ -114,12 +114,14 @@ def get_response(title):
 
 	response = openai.Completion.create(engine = 'text-davinci-003',
 										prompt = create_prompt(title=title),
-										max_tokens = 320,
+										max_tokens = 750,
 										temperature=1)
 	return response
 
 def get_dalle_prompt(title):
-	return "'High definition scene showing '{title}'"
+	prompt = f"Cartoon of '{title}'"
+	print(f'Dalle Prompt: {prompt}')
+	return prompt
 
 def get_img_response(img_title):
 
@@ -142,14 +144,14 @@ def save_image(img_url, file_name):
 	return image_res.status_code
 
 
-blog_title = 'What does the future of AI videogames look like'
-img_title = 'AI video game'
+blog_title = 'Life of a super mum'
+img_title = 'Superhero Mum'
 
 blog_content = get_response(blog_title)['choices'][0]['text']
-
 print(blog_content)
 
 img_url = get_img_response(img_title)['data'][0]['url']
+print(img_url)
 
 save_image(img_url,'blog_image.png')
 
