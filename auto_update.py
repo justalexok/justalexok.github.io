@@ -90,9 +90,71 @@ def write_to_index(path_to_new_content):
 	with open(PATH_TO_BLOG/"index.html","w") as f:
 		f.write(str(soup.prettify(formatter='html')))
 
+def create_prompt(title):
+
+	prompt = f"""
+
+	Alex's website.
+
+	Biography: I'm a videogame developer, exploring how AI will change the videogame industry
+
+	Blog
+
+	31/5/2023
+	Title: {title}
+	tags: AI, tech, videogames, machine learning
+	Summary: I talk about how I think that developments in AI will change the videogame industry and about an new game I'm developing that uses AI.
+	Full text: 
+
+
+	"""
+	return prompt
+
+def get_response(title):
+
+	response = openai.Completion.create(engine = 'text-davinci-003',
+										prompt = create_prompt(title=title),
+										max_tokens = 320,
+										temperature=1)
+	return response
+
+def get_dalle_prompt(title):
+	return "'High definition scene showing '{title}'"
+
+def get_img_response(img_title):
+
+	response = openai.Image.create(
+		prompt = get_dalle_prompt(title = img_title),
+									n=1,
+									size='1024x1024'
+	)
+	return response
+
+def save_image(img_url, file_name):
+
+	image_res = requests.get(img_url, stream = True)
+
+	if image_res.status_code == 200:
+		with open(file_name,'wb') as f:
+			shutil.copyfileobj(image_res.raw,f)
+	else:
+		print('Error downloading image')
+	return image_res.status_code
+
+
+blog_title = 'What does the future of AI videogames look like'
+img_title = 'AI video game'
+
+blog_content = get_response(blog_title)['choices'][0]['text']
+
+print(blog_content)
+
+img_url = get_img_response(img_title)['data'][0]['url']
+
+save_image(img_url,'blog_image.png')
+
+path_to_new_content = create_new_blog(blog_title,blog_content,'blog_image.png')
+
+write_to_index(path_to_new_content)
 
 update_blog()
-
-# path_to_new_content = create_new_blog('SICK PLAY!','watch this now...', 'C:\\Users\\alexg\\OneDrive\\Pictures\\Screenshots\\Screenshot 2023-05-28 152107.png')
-
-# write_to_index(path_to_new_content)
