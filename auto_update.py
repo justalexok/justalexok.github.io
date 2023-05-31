@@ -144,19 +144,19 @@ def save_image(img_url, file_name):
 	return image_res.status_code
 
 
-blog_title = 'Life of a super mum'
-img_title = 'Superhero Mum'
+# blog_title = 'Life of a super mum'
+# img_title = 'Superhero Mum'
 
-blog_content = get_response(blog_title)['choices'][0]['text']
-print(blog_content)
+# blog_content = get_response(blog_title)['choices'][0]['text']
+# print(blog_content)
 
-img_url = get_img_response(img_title)['data'][0]['url']
-print(img_url)
+# img_url = get_img_response(img_title)['data'][0]['url']
+# print(img_url)
 
-save_image(img_url,'blog_image.png')
+# save_image(img_url,'blog_image.png')
 
-path_to_new_content = create_new_blog(blog_title,blog_content,'blog_image.png')
+# path_to_new_content = create_new_blog(blog_title,blog_content,'blog_image.png')
 
-write_to_index(path_to_new_content)
+# write_to_index(path_to_new_content)
 
 update_blog()
