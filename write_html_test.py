@@ -32,14 +32,15 @@ def update_blog(commit_message='Updates blog'):
 # with open(PATH_TO_BLOG/'index.html','w+') as f:
 # 	f.write(f"Follow this page!")
 
-def create_new_blog(title,content):
+def create_new_blog(title,content,cover_image):
 
+	cover_image = Path(cover_image)
 
 	files = len(list(PATH_TO_CONTENT.glob("*.html")))
 	new_title = f"{files+1}.html"
 	path_to_new_content = PATH_TO_CONTENT/new_title
 
-	shutil.copy(PATH_TO_CONTENT, path_to_new_content)
+	shutil.copy(cover_image,PATH_TO_CONTENT)
 	if not os.path.exists(path_to_new_content):
 		with open(path_to_new_content,"w") as f:
 			f.write("<!DOCTYPE html>\n")
@@ -48,6 +49,7 @@ def create_new_blog(title,content):
 			f.write(f"<title> {title} </title>\n")
 			f.write("</head>\n")
 			f.write("<body>\n")
+			f.write(f"<img src='{cover_image.name}' alt='Cover Image'> <br />\n")
 			f.write(f"<h1> {title} </h1>")
 			f.write(content.replace("\n", "<br />\n"))
 			f.write("</body>\n")
@@ -90,11 +92,43 @@ def write_to_index(path_to_new_content):
 
 
 
+def get_dalle_prompt(title):
+	prompt = f"Cartoon of '{title}'"
+	print(f'Dalle Prompt: {prompt}')
+	return prompt
+
+def get_img_response(img_title):
+
+	response = openai.Image.create(
+		prompt = get_dalle_prompt(title = img_title),
+									n=1,
+									size='1024x1024'
+	)
+	return response
+
+def save_image(img_url, file_name):
+
+	image_res = requests.get(img_url, stream = True)
+
+	if image_res.status_code == 200:
+		with open(file_name,'wb') as f:
+			shutil.copyfileobj(image_res.raw,f)
+	else:
+		print('Error downloading image')
+	return image_res.status_code
+
+
 blog_title = 'Privacy Report'
+img_title = 'Cartoon Dog wearing a hat'
 
-blog_content = "Testing 123"
+blog_content = "Example Text"
 
-path_to_new_content = create_new_blog(blog_title,blog_content)
+img_url = get_img_response(img_title)['data'][0]['url']
+print(img_url)
+
+save_image(img_url,'blog_image.png')
+
+path_to_new_content = create_new_blog(blog_title,blog_content,'blog_image.png')
 
 write_to_index(path_to_new_content)
 
